@@ -1,0 +1,84 @@
+<html>
+<head>
+    <link rel="stylesheet" href="libsCss.css">
+    <style>
+        .slick-row {
+            color: #5a5b5b;
+        }
+        .slick-row:hover {
+            background: #dbdddd;
+            color: #282929;
+            z-index: 2000;
+        }
+        .slick-row .slick-cell {
+            border-right: 1px solid #a1a7a7;
+            border-bottom: none;
+            border-left: none;
+            border-top: none;
+            padding: 0;
+        }
+        .slick-row .slick-cell.selected {
+            background: #06749f;
+            color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <div id="myGrid" style="width:600px;height:500px;"></div>
+    <div style="font-size:28px;color:red;margin-top:50px;">
+        Selected rows: <span class="selected-rows"></span>
+    </div>
+
+    <script src="libsJs.js"></script>
+
+    <script>
+        var grid;
+        var data = [];
+        var columns = [{
+            id: "title",
+            name: "Title",
+            field: "title",
+            width: 300,
+            selectable: false,
+            resizable: false
+        }, {
+            id: "priority",
+            name: "Priority",
+            field: "priority",
+            width: 200,
+            selectable: false,
+            resizable: false
+        }];
+
+        var options = {
+            editable: true,
+            enableAddRow: true,
+            enableCellNavigation: true,
+            forceFitColumns: true,
+            autoEdit: false
+        };
+
+        for (var i = 0; i < 100; i++) {
+            var d = (data[i] = {});
+            d["title"] = "Task " + (i+1);
+            d["priority"] = "Medium";
+        }
+
+        grid = new Slick.Grid("#myGrid", data, columns, options);
+
+        grid.setSelectionModel(new Slick.RowSelectionModel());
+
+        grid.onSelectedRowsChanged.subscribe(function () {
+            var selectedRows = grid.getSelectedRows();
+            for (var i=0; i< selectedRows.length; i++) {
+                selectedRows[i] = selectedRows[i]+1;
+            }
+            $('.selected-rows')[0].innerHTML = selectedRows;
+        });
+        grid.onClick.subscribe(function() {
+            $('.selected-rows')[0].innerHTML = '';
+        });
+
+    </script>
+</body>
+</html>
